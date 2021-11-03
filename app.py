@@ -4,7 +4,7 @@ import os
 import aws_cdk as cdk
 
 from test_pipeline.test_pipeline_stack import TestPipelineStack
-from pipeline import GitHubPipeline
+from pipeline import Pipeline
 
 PIPELINE_ENV = cdk.Environment(account="222222222222", region="us-east-1")
 
