@@ -5,7 +5,7 @@ from aws_cdk import aws_codebuild as codebuild
 
 
 class Pipeline(Stack):
-    def __init__(self, scope: Construct, id_: str, **kwargs):
+    def __init__(self, scope, id_: str, **kwargs):
         super().__init__(scope, id_, **kwargs)
 
     # Source
