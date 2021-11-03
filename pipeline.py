@@ -1,5 +1,5 @@
 
-from aws_cdk import core as cdk
+from aws_cdk import Stack
 from aws_cdk import aws_codepipeline as pipelines
 from aws_cdk import aws_codebuild as codebuild
 
