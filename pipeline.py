@@ -1,13 +1,10 @@
-
 from aws_cdk import Stack
+from constructs import Construct
 from aws_cdk import pipelines
-from aws_cdk import aws_codepipeline
-from aws_cdk import aws_codebuild as codebuild
-
 
 class Pipeline(Stack):
-    def __init__(self, scope, id, *, description=None, env=None, tags=None, synthesizer=None, terminationProtection=None, analyticsReporting=None):
-        super().__init__(scope, id, description=description, env=env, tags=tags, synthesizer=synthesizer, terminationProtection=terminationProtection, analyticsReporting=analyticsReporting)
+    def __init__(self, scope: Construct, id: str, *, env=None, **kwargs):
+        super().__init__(scope, id, **kwargs)
 
         # Source
         github_repo = pipelines.CodePipelineSource.connection("MarcoCFA/test-pipeline", "master",
