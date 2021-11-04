@@ -16,6 +16,7 @@ TestPipelineStack(app, "TestPipelineStack",
 
     )
 
-Pipeline(app,"GitHubPipeline",env=PIPELINE_ENV)
+Pipeline(app,description="GitHubPipeline",env=PIPELINE_ENV)
+
 
 app.synth()
