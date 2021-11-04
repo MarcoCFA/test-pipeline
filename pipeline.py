@@ -6,8 +6,8 @@ from aws_cdk import aws_codebuild as codebuild
 
 
 class Pipeline(Stack):
-    def __init__(self, scope, id, *, env=None):
-        super().__init__(scope, id, env=env)
+    def __init__(self, scope, id, *, env=None, synthesizer=None):
+        super().__init__(scope, id, env=env, synthesizer=synthesizer)
 
         # Source
         github_repo = pipelines.CodePipelineSource.connection("MarcoCFA/test-pipeline", "master",
