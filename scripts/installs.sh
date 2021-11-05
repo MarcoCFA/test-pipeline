@@ -9,6 +9,7 @@ set -o verbose
 # Install local CDK CLI version
 npm install -g aws-cdk
 
+
 # Requirements
 pip install -r requirements.txt
 
