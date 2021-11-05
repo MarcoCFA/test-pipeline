@@ -20,12 +20,8 @@ class Pipeline(Stack):
 
         pipeline = pipelines.CodePipeline(self, "GitHubPipeline", pipeline_name="github-pipeline",cross_account_keys=False,synth=synth_step)
 
-          """
-          
-            Synth Step with ShellStep
-             pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False, synth=pipelines.ShellStep("Synth", input=github_repo,
-             commands=["npm ci", "npm run build", "npx cdk synth"]))
-             
-          """
+             #Synth Step with ShellStep
+             #pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False, synth=pipelines.ShellStep("Synth", input=github_repo,commands=["npm ci", "npm run build", "npx cdk synth"]))
+
 
 
