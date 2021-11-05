@@ -14,7 +14,7 @@ class Pipeline(Stack):
             "Synth",
             input=github_repo,
             install_commands=["./scripts/installs.sh"],
-            commands=["./scripts/run_tests.sh"],
+            commands=["./scripts/run_tests.sh, cdk synth"],
             primary_output_directory="./cdk.out"
         )
 
