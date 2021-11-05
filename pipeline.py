@@ -10,8 +10,22 @@ class Pipeline(Stack):
         github_repo = pipelines.CodePipelineSource.connection("MarcoCFA/test-pipeline", "master",
                                                               connection_arn="arn:aws:codestar-connections:us-east-1:225342792054:connection/0d952b85-4245-42bc-8619-a03128f24aa9")
 
-        #synth_step = pipelines.CodeBuildStep()
+        synth_step = pipelines.CodeBuildStep(
+            "Synth",
+            input=github_repo,
+            install_commands=["./scripts/installs.sh"],
+            commands=["./scripts/run_tests.sh, npx cdk synth"],
+            primary_output_directory="cdk.out"
+        )
 
-        pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False,
-                                          synth=pipelines.ShellStep("Synth", input=github_repo,
-                                                                    commands=["npm ci", "npm run build", "npx cdk synth"]))
+        pipeline = pipelines.CodePipeline(self, "GitHubPipeline", pipeline_name="github-pipeline",cross_account_keys=False,synth=synth_step)
+
+          """
+          
+            Synth Step with ShellStep
+             pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False, synth=pipelines.ShellStep("Synth", input=github_repo,
+             commands=["npm ci", "npm run build", "npx cdk synth"]))
+             
+          """
+
+
