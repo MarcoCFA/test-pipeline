@@ -15,7 +15,7 @@ class Pipeline(Stack):
             input=github_repo,
             install_commands=["./scripts/installs.sh"],
             commands=["npx cdk synth"],
-            primary_output_directory='cdk/cdk.out'
+            primary_output_directory="cdk/cdk.out"
         )
 
         pipeline = pipelines.CodePipeline(self, "GitHubPipeline", pipeline_name="github-pipeline",cross_account_keys=False,synth=synth_step)
