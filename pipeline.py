@@ -2,6 +2,7 @@ from aws_cdk import Stack
 from constructs import Construct
 from aws_cdk import pipelines
 
+
 class Pipeline(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
@@ -18,10 +19,19 @@ class Pipeline(Stack):
             primary_output_directory="cdk.out"
         )
 
-        pipeline = pipelines.CodePipeline(self, "GitHubPipeline", pipeline_name="github-pipeline",cross_account_keys=False,synth=synth_step)
+        pipeline = pipelines.CodePipeline(self, "GitHubPipeline", pipeline_name="github-pipeline",
+                                          cross_account_keys=False, synth=synth_step)
 
         # Synth Step with ShellStep
         # pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False, synth=pipelines.ShellStep("Synth", input=github_repo,commands=["npm ci", "npm run build", "npx cdk synth"]))
 
+        ## Stages
 
+        ### Security Check
+        # stage = myApp(self,"id")
 
+        pipeline.add_stage(stage,
+                           pre=[
+                               pipelines.ConfirmPermissionsBroadening("Check", stage=stage)
+                           ]
+                           )
