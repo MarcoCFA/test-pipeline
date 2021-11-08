@@ -1,6 +1,14 @@
 
 # AWS CDK
 .cdk.staging
+cdk.out/GitHubPipeline.assets.json
+cdk.out/GitHubPipeline.template.json
+cdk.out/manifest.json
+
+cdk.out/TestPipelineStack.assets.json
+cdk.out/TestPipelineStack.template.json
+cdk.out/tree.json
+
 
 
 # AWS Chalice
