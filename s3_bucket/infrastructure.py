@@ -1,11 +1,12 @@
-from aws_cdk import Stack
 from constructs import Construct
 from aws_cdk import aws_s3 as s3
 
-class TestPipelineStack(Stack):
+class TestBucket(Construct):
+    def __int__(self, scope: Construct, id_: str, *, test_bucket_name: str):
+        super().__int__()(scope,id)
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
+        self.bucket_name = test_bucket_name
 
-        # The code that defines your stack goes here
-        bucket = s3.Bucket(self, "my-test-bucket-1",bucket_name="my-test-bucket")
+
+
+
