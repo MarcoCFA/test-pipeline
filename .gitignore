@@ -1,8 +1,7 @@
 
 # AWS CDK
-cdk.out/
 .cdk.staging
-cdk.out
+
 
 # AWS Chalice
 chalice.out/

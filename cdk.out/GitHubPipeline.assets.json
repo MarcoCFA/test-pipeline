@@ -1,0 +1,20 @@
+{
+  "version": "13.0.0",
+  "files": {
+    "23847b63103214d9399b9cf05dad561346d7931b81d888cf4d3cd6dcffe3a609": {
+      "source": {
+        "path": "GitHubPipeline.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "225342792054-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-225342792054-us-east-1",
+          "objectKey": "23847b63103214d9399b9cf05dad561346d7931b81d888cf4d3cd6dcffe3a609.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::225342792054:role/cdk-hnb659fds-file-publishing-role-225342792054-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

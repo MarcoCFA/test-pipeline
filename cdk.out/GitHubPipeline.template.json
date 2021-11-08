@@ -1,0 +1,894 @@
+{
+  "Resources": {
+    "GitHubPipelineArtifactsBucketC7768FF0": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/ArtifactsBucket/Resource"
+      }
+    },
+    "GitHubPipelineRole99399731": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Role/Resource"
+      }
+    },
+    "GitHubPipelineRoleDefaultPolicy1AB2F05D": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineArtifactsBucketC7768FF0",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "GitHubPipelineArtifactsBucketC7768FF0",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRole1FBA709D",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GitHubPipelineBuildSynthCodePipelineActionRoleB44285DB",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRole5B11E499",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineRoleDefaultPolicy1AB2F05D",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineRole99399731"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Role/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipeline02E82AA5": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GitHubPipelineRole99399731",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeStarSourceConnection",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ConnectionArn": "arn:aws:codestar-connections:us-east-1:225342792054:connection/0d952b85-4245-42bc-8619-a03128f24aa9",
+                  "FullRepositoryId": "MarcoCFA/test-pipeline",
+                  "BranchName": "master"
+                },
+                "Name": "MarcoCFA_test-pipeline",
+                "OutputArtifacts": [
+                  {
+                    "Name": "MarcoCFA_test_pipeline_Source"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRole1FBA709D",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "GitHubPipelineBuildSynthCdkBuildProject465B723D"
+                  },
+                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"e91e93a6a3a504090ddb186f00fd9d14162d6dcd3fedfb768071c43fa0ce6bd0\"}]"
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "MarcoCFA_test_pipeline_Source"
+                  }
+                ],
+                "Name": "Synth",
+                "OutputArtifacts": [
+                  {
+                    "Name": "Synth_Output"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineBuildSynthCodePipelineActionRoleB44285DB",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Build"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "GitHubPipelineUpdatePipelineSelfMutation68976758"
+                  },
+                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"5994740d5f32dcb47a25a05cb21da40c16939c69491e6dc51daf29c1b45fd163\"}]"
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "Synth_Output"
+                  }
+                ],
+                "Name": "SelfMutate",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRole5B11E499",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "UpdatePipeline"
+          }
+        ],
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "GitHubPipelineArtifactsBucketC7768FF0"
+          },
+          "Type": "S3"
+        },
+        "Name": "github-pipeline",
+        "RestartExecutionOnUpdate": true
+      },
+      "DependsOn": [
+        "GitHubPipelineRoleDefaultPolicy1AB2F05D",
+        "GitHubPipelineRole99399731"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Resource"
+      }
+    },
+    "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRole1FBA709D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::225342792054:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Source/MarcoCFA_test-pipeline/CodePipelineActionRole/Resource"
+      }
+    },
+    "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRoleDefaultPolicy350B3EA7": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codestar-connections:UseConnection",
+              "Effect": "Allow",
+              "Resource": "arn:aws:codestar-connections:us-east-1:225342792054:connection/0d952b85-4245-42bc-8619-a03128f24aa9"
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineArtifactsBucketC7768FF0",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "GitHubPipelineArtifactsBucketC7768FF0",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "s3:PutObjectAcl",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "GitHubPipelineArtifactsBucketC7768FF0",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRoleDefaultPolicy350B3EA7",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineSourceMarcoCFAtestpipelineCodePipelineActionRole1FBA709D"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Source/MarcoCFA_test-pipeline/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineBuildSynthCdkBuildProjectRole5CD7E7F5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource"
+      }
+    },
+    "GitHubPipelineBuildSynthCdkBuildProjectRoleDefaultPolicyF98D9CB2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:225342792054:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "GitHubPipelineBuildSynthCdkBuildProject465B723D"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:225342792054:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "GitHubPipelineBuildSynthCdkBuildProject465B723D"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:us-east-1:225342792054:report-group/",
+                    {
+                      "Ref": "GitHubPipelineBuildSynthCdkBuildProject465B723D"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineArtifactsBucketC7768FF0",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "GitHubPipelineArtifactsBucketC7768FF0",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineBuildSynthCdkBuildProjectRoleDefaultPolicyF98D9CB2",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineBuildSynthCdkBuildProjectRole5CD7E7F5"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineBuildSynthCdkBuildProject465B723D": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:5.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "GitHubPipelineBuildSynthCdkBuildProjectRole5CD7E7F5",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"./scripts/installs.sh\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"npx cdk synth\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk/cdk.out\",\n    \"files\": \"**/*\"\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "EncryptionKey": "alias/aws/s3"
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Build/Synth/CdkBuildProject/Resource"
+      }
+    },
+    "GitHubPipelineBuildSynthCodePipelineActionRoleB44285DB": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::225342792054:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Build/Synth/CodePipelineActionRole/Resource"
+      }
+    },
+    "GitHubPipelineBuildSynthCodePipelineActionRoleDefaultPolicyFF56BB8C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GitHubPipelineBuildSynthCdkBuildProject465B723D",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineBuildSynthCodePipelineActionRoleDefaultPolicyFF56BB8C",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineBuildSynthCodePipelineActionRoleB44285DB"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/Build/Synth/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRole5B11E499": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::225342792054:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/UpdatePipeline/SelfMutate/CodePipelineActionRole/Resource"
+      }
+    },
+    "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicyE22C0AA3": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "GitHubPipelineUpdatePipelineSelfMutation68976758",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRoleDefaultPolicyE22C0AA3",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineUpdatePipelineSelfMutateCodePipelineActionRole5B11E499"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/UpdatePipeline/SelfMutate/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineUpdatePipelineSelfMutationRole6388AA44": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/UpdatePipeline/SelfMutation/Role/Resource"
+      }
+    },
+    "GitHubPipelineUpdatePipelineSelfMutationRoleDefaultPolicyBABDE001": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:225342792054:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "GitHubPipelineUpdatePipelineSelfMutation68976758"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:225342792054:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "GitHubPipelineUpdatePipelineSelfMutation68976758"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:us-east-1:225342792054:report-group/",
+                    {
+                      "Ref": "GitHubPipelineUpdatePipelineSelfMutation68976758"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "ForAnyValue:StringEquals": {
+                  "iam:ResourceTag/aws-cdk:bootstrap-role": [
+                    "image-publishing",
+                    "file-publishing",
+                    "deploy"
+                  ]
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "arn:*:iam::225342792054:role/*"
+            },
+            {
+              "Action": "cloudformation:DescribeStacks",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "s3:ListBucket",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineArtifactsBucketC7768FF0",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "GitHubPipelineArtifactsBucketC7768FF0",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "GitHubPipelineUpdatePipelineSelfMutationRoleDefaultPolicyBABDE001",
+        "Roles": [
+          {
+            "Ref": "GitHubPipelineUpdatePipelineSelfMutationRole6388AA44"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/UpdatePipeline/SelfMutation/Role/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineUpdatePipelineSelfMutation68976758": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/standard:5.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "GitHubPipelineUpdatePipelineSelfMutationRole6388AA44",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g aws-cdk\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"cdk -a . deploy GitHubPipeline --require-approval=never --verbose\"\n      ]\n    }\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Name": "github-pipeline-selfupdate"
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/UpdatePipeline/SelfMutation/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WNTQ6CMBCFz8K+jAgL41Yu0OgBDAw1DpSW9CeGNL27UEBX8817b96UUECRG4TynDUfm2M35JJaCA/X4MAmmoQkJSzUuhN839iSfAZclMOH8PPqlzo4MltBuHkchFv1jSKjZoRw1zKF0+RaEs7pNlFka3vrSXb/am50LzA17RhjahBWe4PLOz67t1anCq5wyXpLlBuvHI0C7tv8AoWsjIrvAAAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store."
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}
