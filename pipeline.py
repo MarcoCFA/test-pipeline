@@ -32,7 +32,7 @@ class Pipeline(Stack):
         stage = Deployment(self, "DeployStack")
 
         # Add
-        ### Security Check
+        ### Security Check with manual approval
         pipeline.add_stage(stage,
                            pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage), pipelines.ManualApprovalStep("Approve Security Changes")]
                            )
