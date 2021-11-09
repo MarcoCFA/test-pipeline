@@ -327,6 +327,16 @@
                                       "Effect": "Allow",
                                       "Resource": {
                                         "Fn::GetAtt": [
+                                          "GitHubPipelineDeployStackApproveSecurityChangesCodePipelineActionRoleCF79EDB5",
+                                          "Arn"
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::GetAtt": [
                                           "GitHubPipelineDeployStackCheckCheckCodePipelineActionRole7A8B0467",
                                           "Arn"
                                         ]
@@ -513,6 +523,22 @@
                           {
                             "name": "DeployStack",
                             "actions": [
+                              {
+                                "name": "Approve_Security_Changes",
+                                "actionTypeId": {
+                                  "category": "Approval",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "Manual"
+                                },
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::GetAtt": [
+                                    "GitHubPipelineDeployStackApproveSecurityChangesCodePipelineActionRoleCF79EDB5",
+                                    "Arn"
+                                  ]
+                                }
+                              },
                               {
                                 "name": "Check.Check",
                                 "inputArtifacts": [
@@ -1292,6 +1318,62 @@
                     "id": "DeployStack",
                     "path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack",
                     "children": {
+                      "Approve_Security_Changes": {
+                        "id": "Approve_Security_Changes",
+                        "path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack/Approve_Security_Changes",
+                        "children": {
+                          "CodePipelineActionRole": {
+                            "id": "CodePipelineActionRole",
+                            "path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack/Approve_Security_Changes/CodePipelineActionRole",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack/Approve_Security_Changes/CodePipelineActionRole/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                                  "aws:cdk:cloudformation:props": {
+                                    "assumeRolePolicyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": "sts:AssumeRole",
+                                          "Effect": "Allow",
+                                          "Principal": {
+                                            "AWS": {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  "arn:",
+                                                  {
+                                                    "Ref": "AWS::Partition"
+                                                  },
+                                                  ":iam::225342792054:root"
+                                                ]
+                                              ]
+                                            }
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                                  "version": "2.0.0-rc.21"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Role",
+                              "version": "2.0.0-rc.21"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.0.9"
+                        }
+                      },
                       "Check.Check": {
                         "id": "Check.Check",
                         "path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack/Check.Check",

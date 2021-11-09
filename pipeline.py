@@ -33,4 +33,6 @@ class Pipeline(Stack):
 
         # Add
         ### Security Check
-        pipeline.add_stage(stage, pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage)])
+        pipeline.add_stage(stage,
+                           pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage), pipelines.ManualApprovalStep("Approve Security Changes")]
+                           )

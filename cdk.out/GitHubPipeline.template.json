@@ -189,6 +189,16 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
+                  "GitHubPipelineDeployStackApproveSecurityChangesCodePipelineActionRoleCF79EDB5",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
                   "GitHubPipelineDeployStackCheckCheckCodePipelineActionRole7A8B0467",
                   "Arn"
                 ]
@@ -357,6 +367,22 @@
           },
           {
             "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Approval",
+                  "Owner": "AWS",
+                  "Provider": "Manual",
+                  "Version": "1"
+                },
+                "Name": "Approve_Security_Changes",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "GitHubPipelineDeployStackApproveSecurityChangesCodePipelineActionRoleCF79EDB5",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              },
               {
                 "ActionTypeId": {
                   "Category": "Build",
@@ -938,6 +964,37 @@
       },
       "Metadata": {
         "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/UpdatePipeline/SelfMutate/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "GitHubPipelineDeployStackApproveSecurityChangesCodePipelineActionRoleCF79EDB5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::225342792054:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "GitHubPipeline/GitHubPipeline/Pipeline/DeployStack/Approve_Security_Changes/CodePipelineActionRole/Resource"
       }
     },
     "GitHubPipelineDeployStackCheckCheckCodePipelineActionRole7A8B0467": {
