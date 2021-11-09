@@ -1,5 +1,5 @@
 from s3_bucket.infrastructure import TestBucket
-import aws_cdk as cdk
+from aws_cdk import Stage
 from aws_cdk import Stack
 from constructs import Construct
 
