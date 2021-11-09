@@ -1,4 +1,4 @@
-from s3_bucket import TestBucket
+from s3_bucket.infrastructure import TestBucket
 import aws_cdk as cdk
 from aws_cdk import Stack
 from constructs import Construct
