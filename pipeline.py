@@ -1,6 +1,7 @@
 from aws_cdk import Stack
 from constructs import Construct
 from aws_cdk import pipelines
+from deployment import Deployment
 
 
 class Pipeline(Stack):
@@ -26,8 +27,10 @@ class Pipeline(Stack):
         # pipeline = pipelines.CodePipeline(self, "GitHubPipeline", cross_account_keys=False, synth=pipelines.ShellStep("Synth", input=github_repo,commands=["npm ci", "npm run build", "npx cdk synth"]))
 
         ## Stages
+        # Import deployment stage
 
+        stage = Deployment(self, "DeployStack")
+
+        # Add
         ### Security Check
-        # stage = myApp(self,"id")
-
-        #pipeline.add_stage(stage,pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage)])
+        pipeline.add_stage(stage, pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage)])

@@ -1,0 +1,19 @@
+{
+  "version": "13.0.0",
+  "files": {
+    "3752eae48e51a4dc0a3be70b5dacac4b2c91a1ea09756f1ef63dd86623edda31": {
+      "source": {
+        "path": "GitHubPipelineDeployStackdeployStackC9ED5134.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "3752eae48e51a4dc0a3be70b5dacac4b2c91a1ea09756f1ef63dd86623edda31.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

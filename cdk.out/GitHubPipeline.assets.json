@@ -1,7 +1,21 @@
 {
   "version": "13.0.0",
   "files": {
-    "94c9066f353a559fae8690b43f2ccaff071e5bb7ac2a50cd477ce6c7b6c0e1a3": {
+    "aa73420c85db7a73a5db237d29df05e8b5a3989e56e63f9937fd41e2f29f9c11": {
+      "source": {
+        "path": "asset.aa73420c85db7a73a5db237d29df05e8b5a3989e56e63f9937fd41e2f29f9c11",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "225342792054-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-225342792054-us-east-1",
+          "objectKey": "aa73420c85db7a73a5db237d29df05e8b5a3989e56e63f9937fd41e2f29f9c11.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::225342792054:role/cdk-hnb659fds-file-publishing-role-225342792054-us-east-1"
+        }
+      }
+    },
+    "1a357f82ab30684de219d1564ce8e83cec644eef47d30d2420c1d214e450bffc": {
       "source": {
         "path": "GitHubPipeline.template.json",
         "packaging": "file"
@@ -9,7 +23,7 @@
       "destinations": {
         "225342792054-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-225342792054-us-east-1",
-          "objectKey": "94c9066f353a559fae8690b43f2ccaff071e5bb7ac2a50cd477ce6c7b6c0e1a3.json",
+          "objectKey": "1a357f82ab30684de219d1564ce8e83cec644eef47d30d2420c1d214e450bffc.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::225342792054:role/cdk-hnb659fds-file-publishing-role-225342792054-us-east-1"
         }

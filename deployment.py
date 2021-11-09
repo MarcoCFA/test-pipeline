@@ -5,8 +5,8 @@ from constructs import Construct
 
 
 class Deployment(Stage):
-    def __init__(self, scope: Construct, id_: str, *, test_bucket_name: str, **kwargs):
-        super().__int__()(scope, id, **kwargs)
+    def __init__(self, scope: Construct, construct_id: str, **kwargs):
+        super().__init__(scope, construct_id, **kwargs)
 
         deployStack = Stack(self, "deployStack")
 

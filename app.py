@@ -12,10 +12,10 @@ PIPELINE_ENV = cdk.Environment(account="225342792054", region="us-east-1")
 app = cdk.App()
 
 # Add deployment to app
-Deployment(app, "TestPipelineStack",env=APP_ENV)
+Deployment(app, "TestPipelineStack", env=APP_ENV)
 
 # Add app to pipeline
-Pipeline(app,"GitHubPipeline",env=PIPELINE_ENV)
+Pipeline(app, "GitHubPipeline", env=PIPELINE_ENV)
 
 
 app.synth()

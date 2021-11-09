@@ -1,0 +1,54 @@
+{
+  "version": "13.0.0",
+  "artifacts": {
+    "TestPipelineStackdeployStackBF437311.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "TestPipelineStackdeployStackBF437311.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "TestPipelineStackdeployStackBF437311": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://225342792054/us-east-1",
+      "properties": {
+        "templateFile": "TestPipelineStackdeployStackBF437311.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::225342792054:role/cdk-hnb659fds-deploy-role-225342792054-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::225342792054:role/cdk-hnb659fds-cfn-exec-role-225342792054-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-225342792054-us-east-1/a9f37408f1644accff79808c272649a5f406719cf2d9474530f068385f54d8b0.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "TestPipelineStackdeployStackBF437311.assets"
+        ],
+        "stackName": "TestPipelineStack-deployStack"
+      },
+      "dependencies": [
+        "TestPipelineStackdeployStackBF437311.assets"
+      ],
+      "metadata": {
+        "/TestPipelineStack/deployStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/TestPipelineStack/deployStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/TestPipelineStack/deployStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "TestPipelineStack/deployStack"
+    }
+  }
+}
