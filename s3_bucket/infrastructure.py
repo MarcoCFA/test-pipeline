@@ -1,3 +1,4 @@
+import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk import aws_s3 as s3
 
@@ -8,9 +9,8 @@ class TestBucket(Construct):
         self.bucket = None
         self.bucket_name = test_bucket_name
 
-        def create_bucket(self):
-            self.bucket = s3.Bucket(self, bucket_name=self.bucket_name, removal_policy=aws_cdk.RemovalPolicy)
-
+    def create_bucket(self):
+        self.bucket = s3.Bucket(self, bucket_name=self.bucket_name, removal_policy=cdk.RemovalPolicy)
 
 
 
