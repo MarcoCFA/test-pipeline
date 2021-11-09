@@ -30,8 +30,4 @@ class Pipeline(Stack):
         ### Security Check
         # stage = myApp(self,"id")
 
-        pipeline.add_stage(stage,
-                           pre=[
-                               pipelines.ConfirmPermissionsBroadening("Check", stage=stage)
-                           ]
-                           )
+        #pipeline.add_stage(stage,pre=[pipelines.ConfirmPermissionsBroadening("Check", stage=stage)])
