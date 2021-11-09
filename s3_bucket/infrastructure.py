@@ -2,7 +2,7 @@ from constructs import Construct
 from aws_cdk import aws_s3 as s3
 
 class TestBucket(Construct):
-    def __int__(self, scope: Construct, id_: str, *, test_bucket_name: str):
+    def __int__(self, scope: Construct, id_: str, *, test_bucket_name: str, **kwargs):
         super().__int__()(scope, id, **kwargs)
 
         self.bucket = None
