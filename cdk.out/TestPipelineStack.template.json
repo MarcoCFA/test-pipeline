@@ -2,6 +2,9 @@
   "Resources": {
     "mytestbucket117FF0DC4": {
       "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "my-test-bucket"
+      },
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain",
       "Metadata": {
