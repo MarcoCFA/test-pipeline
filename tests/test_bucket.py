@@ -9,7 +9,7 @@ class Deployment(Stage):
 
         deployStack = Stack(self, "deployStack")
 
-        bucket_name = 'my-bucket-1981'
+        test_bucket_name = 'my-test-bucket-1981'
 
         # Add bucket to the stack
-        my_bucket = TestBucket(deployStack, bucket_name)
+        test_bucket = TestBucket(deployStack, test_bucket_name)
