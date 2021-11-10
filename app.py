@@ -11,7 +11,9 @@ PIPELINE_ENV = cdk.Environment(account="225342792054", region="us-east-1")
 app = cdk.App()
 
 # Add deployment to app
-Deployment(app, "TestPipelineStack", env=APP_ENV)
+bucket_name = 'my-bucket-1981'
+
+Deployment(app, "TestPipelineStack", bucket_name, env=APP_ENV)
 
 # Add app to pipeline
 Pipeline(app, "GitHubPipeline", env=PIPELINE_ENV)
