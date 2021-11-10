@@ -15,9 +15,6 @@ setuptools.setup(
 
     author="author",
 
-    package_dir={"": "test_pipeline"},
-    packages=setuptools.find_packages(where="test_pipeline"),
-
     install_requires=[
         "aws-cdk-lib==2.0.0-rc.21",
         "constructs>=10.0.0,<11.0.0",
